@@ -8,3 +8,4 @@ First and most importantly: Any C# file, any file underneath the Unity_Subsystem
 
 Second, all of the data conversion and tracking functionality requires a Raspberry Pi, as the modules are defined for Raspbian OS.
 
+Finally, All asset files were used in Unity environment, if you wanted to test these personally just create a new unity project in unity editor and move the assets here into the asset folder.
