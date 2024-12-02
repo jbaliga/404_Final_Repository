@@ -10,6 +10,8 @@ import threading
 uAngle = 0.0
 uDist = 0.0
 test = 1.1
+
+#three sockets for github file, in practice 2 of the sockets would be commented out
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -18,6 +20,8 @@ port = 1234
 client_socket.connect((host, port))
 client_socket1.connect((host, 2345))
 client_socket2.connect((host, 3456))
+
+#function for angle (and distance) update from Hub that will be updated with a thread
 def angle_update(socket, truth):
 
     global uAngle
@@ -33,6 +37,7 @@ def angle_update(socket, truth):
 
 truth = 1
 
+###the thread that is updating the values previously mentioned
 thred= threading.Thread(target = angle_update, args = (client_socket1,truth))
 thred.start()
     
@@ -46,12 +51,12 @@ thred.start()
 
 
 
-
+#linux audio control function so that amplitude of volume can be controlled
 def set_volume(volume):
     command = f"amixer set Master {volume}%"
     subprocess.call(command, shell=True)
 
-
+###intialize variables for calculation later
 scaleDist = 0.0
 scaleAng = 0.0
 uAngleMag = 0.0
@@ -158,7 +163,7 @@ print(height) ###check to make sure output is right dimensions
 ###we dont want the sliders themselves to actually call a function, so we define a null function
 def nothing(x):
     pass
-###creates sliders for lower and upper bounds of H, S, and V respectively
+###creates sliders for lower and upper bounds of H, S, and V respectively, THESE ARE NOT USED ANYMORE AS THEY DESTROYED FRAMERATE
 ###cv2.createTrackbar("L=H", "sliders", 0 ,180, nothing)
 ###cv2.createTrackbar("L=S", "sliders", 0 ,255, nothing)
 ###cv2.createTrackbar("L=V", "sliders", 0 ,255, nothing)
@@ -169,13 +174,13 @@ def nothing(x):
 ###not used for now
 iterationCount = 0
 
-###creation of channels
+###creation of channels, also no longer used but could be in a less precise system
 front = 0
 left = 0
 right = 0
 back = 0
 
-##live updating audio channel initialization
+##live updating audio channel initialization, same case as above
 channelFront = 0
 channelLeft = 0
 channelRight = 0
@@ -281,6 +286,7 @@ while True:
                     angle -= 15
                 if(LR>200):
                     angle+=15
+                ###ACTUAL SCALING CALCULATION
                 tAngle = angle
                 tDist = distance
                 scaleDist = tDist/(uDist*.5)
@@ -319,6 +325,7 @@ while True:
                 if(LR>200):
                     angle -= 15
                 print(angle)
+                ###ACTUAL SCALING CALCULATION
                 tAngle = angle
                 tDist = distance
                 scaleDist = tDist/(uDist*.5)
@@ -360,6 +367,7 @@ while True:
                 if(LR>200):
                     angle -= 15
                 print(angle)
+                ###ACTUAL SCALING CALCULATION
                 tAngle = angle
                 tDist = distance
                 scaleDist = tDist/(uDist*.5)
@@ -398,6 +406,7 @@ while True:
                 if(LR>-200):
                     angle-=15
                 print(angle)
+                ###ACTUAL SCALING CALCULATION
                 tAngle = angle
                 tDist = distance
                 scaleDist = tDist/(uDist*.5)
@@ -432,4 +441,3 @@ while True:
     if cv2.waitKey(1) == ord("q"): 
         break
 
-    ###check last values after quitting (might take a couple tries depending on where in loop you quit)
